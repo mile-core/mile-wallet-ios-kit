@@ -1,1 +1,14 @@
-# Add any directories, files, or patterns you don't want to be tracked by version control
+*.xcbkptlist
+Podfile.lock
+Pods
+Build
+Index
+*/**/*.xcuserstate
+*/**/*.xcbkptlist
+*.xcbkptlist
+*.xcuserstate
+*xcshareddata
+*.xccheckout
+DegradrFilterTest.xcscheme
+*/**/Build
+*/**/Checkouts
