@@ -33,9 +33,14 @@ public struct Wallet {
     
     public static func create(name:String, secretPhrase:String?,
                                           error: @escaping ((_ error: SessionTaskError?)-> Void),  
-                                          complete: @escaping ((_ wallet: Wallet)->Void)) {                            
-        let keys = MileCsa.generateKeys()         
-        complete(Wallet(name: name, publicKey: keys.publicKey, privateKey: keys.privateKey, password: secretPhrase))        
+                                          complete: @escaping ((_ wallet: Wallet)->Void)) {
+        do {
+            let keys = try MileCsa.generateKeys()         
+            complete(Wallet(name: name, publicKey: keys.publicKey, privateKey: keys.privateKey, password: secretPhrase))
+        }
+        catch let err {
+            error(SessionTaskError.requestError(err))
+        }
     }
         
     public init(name:String, publicKey:String, privateKey:String, password:String?){
