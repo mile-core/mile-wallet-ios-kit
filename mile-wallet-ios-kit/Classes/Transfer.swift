@@ -13,7 +13,7 @@ import ObjectMapper
 import MileCsaLight
 
 public struct Transfer {
-            
+    
     public var transactionData:String? { return _transactionData }    
     public var result:Bool { return _result }        
     
@@ -63,32 +63,38 @@ public struct Transfer {
                         return                    
                     }
                     
-                    let data = MileCsa.createTransfer(MileCsaKeys(from_key, 
-                                                                  privateKey: from_private_key), 
-                                                      destPublicKey: to_key, 
-                                                      transactionId: "\(trxId)", 
-                        assets: assetValue, 
-                        amount: "\(amount.floatValue)")
-                    
-                    let batchFactory = BatchFactory(version: "2.0", idGenerator: NumberIdGenerator())
-                    
-                    let request = MileTransferAsset(transaction_data: data)
-                    
-                    
-                    let batch = batchFactory.create(request)
-                    let httpRequest = MileServiceRequest(batch: batch)
-                    
-                    Session.send(httpRequest) { (result) in
-                        switch result {    
-                            
-                        case .success(let response):
-                            
-                            complete(Transfer(_transactionData: data, _result: response))                     
-                            
-                        case .failure(let er):                
-                            error(er)
-                        }
-                    }                                
+                    do {
+                        let data = try MileCsa.createTransfer(MileCsaKeys(from_key, 
+                                                                          privateKey: from_private_key), 
+                                                              destPublicKey: to_key, 
+                                                              transactionId: "\(trxId)", 
+                            assets: assetValue, 
+                            amount: "\(amount.floatValue)")
+                        
+                        
+                        let batchFactory = BatchFactory(version: "2.0", idGenerator: NumberIdGenerator())
+                        
+                        let request = MileTransferAsset(transaction_data: data)
+                        
+                        
+                        let batch = batchFactory.create(request)
+                        let httpRequest = MileServiceRequest(batch: batch)
+                        
+                        Session.send(httpRequest) { (result) in
+                            switch result {    
+                                
+                            case .success(let response):
+                                
+                                complete(Transfer(_transactionData: data, _result: response))                     
+                                
+                            case .failure(let er):                
+                                error(er)
+                            }
+                        }  
+                    }
+                    catch let err {
+                        error(SessionTaskError.requestError(err))
+                    }
                 case .failure(let er):                
                     error(er)
                 }
