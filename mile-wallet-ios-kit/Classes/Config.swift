@@ -11,11 +11,13 @@ import UIKit
 public struct Config {
     public static let mileHosts = ["https://wallet.mile.global", "http://localhost:4000", "https://mile-wallet.karma.red", "https://149.28.162.70:4000"]
         
-    public static let publicKeyQrPrefix    = "MILE:PUB:"
-    public static let privateKeyQrPrefix   = "MILE:PRIV:"
-    public static let noteQrPrefix         = "MILE:NOTE:"
-    public static let nameQrPrefix         = "MILE:NOTE:NAME:"
-    public static let secretPhraseQrPrefix = "MILE:SECRET:"
-    public static let amountQrPrefix       = "MILE:AMOUNT:"
-    public static let paymentQrPrefix      = "MILE:PAYMENT:"        
+    public static let api = "https://wallet.mile.global/v1"
+    
+    public static let publicKeyQrPrefix    = api+"/qrcode/public/key/"
+    public static let privateKeyQrPrefix   = api+"/qrcode/private/key/"
+    public static let noteQrPrefix         = api+"/qrcode/note/"
+    public static let nameQrPrefix         = api+"/qrcode/note/name/"
+    public static let secretPhraseQrPrefix = api+"/qrcode/secret/phrase/"
+    public static let amountQrPrefix       = api+"/qrcode/amount/"
+    public static let paymentQrPrefix      = api+"/qrcode/payment/"        
 }

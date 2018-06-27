@@ -26,7 +26,7 @@ public struct Transfer {
         guard let from_key = from.publicKey else { return }
         guard let to_key = to.publicKey else { return }
         guard let from_private_key = from.privateKey else { return }
-        
+                        
         
         Chain.update(error: { (err) in
             error(err)
@@ -64,6 +64,9 @@ public struct Transfer {
                     }
                     
                     do {
+                        
+                        Swift.print("createTransfer: from: \(from_key, from_private_key, assetValue, amount) --> \(to_key, trxId)")
+                        
                         let data = try MileCsa.createTransfer(MileCsaKeys(from_key, 
                                                                           privateKey: from_private_key), 
                                                               destPublicKey: to_key, 
@@ -71,6 +74,8 @@ public struct Transfer {
                             assets: assetValue, 
                             amount: "\(amount.floatValue)")
                         
+                        
+                        Swift.print("createTransfer: \(data) ")
                         
                         let batchFactory = BatchFactory(version: "2.0", idGenerator: NumberIdGenerator())
                         
