@@ -76,6 +76,27 @@ public extension String {
     }
 }
 
+public extension String {
+    
+    public var qrCodePayment:(publicKey:String, assets:String?, amount:String?, name:String?)? {
+        
+        if self.hasPrefix(Config.paymentQrPrefix) {
+            
+            let array = self.replacingOccurrences(of: Config.paymentQrPrefix, with: "").components(separatedBy: ":")                            
+            if array.count == 4 {
+                return (array[0],array[1],array[2],array[3])
+            }            
+        }
+        else if self.hasPrefix(Config.publicKeyQrPrefix) {
+            let pk = self.replacingOccurrences(of: Config.publicKeyQrPrefix, with: "")
+            return (pk,nil,nil,nil)
+        }
+        
+        return nil
+    }
+    
+}
+
 public extension UIAlertController {
     
     @discardableResult

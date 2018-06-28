@@ -14,42 +14,57 @@ import EFQRCode
 import MileCsaLight
 
 public struct Wallet {    
-
+    
     public var name:String? { return _name }
     public var secretPhrase:String? { return _secretPhrase}
     public var publicKey:String? { return _publicKey }    
     public var privateKey:String? { return _privateKey }    
-
+    
     public var nameQRImage:UIImage? { return name?.qrCodeImage(with: Config.nameQrPrefix) }
     public var secretPhraseQRImage:UIImage? { return secretPhrase?.qrCodeImage(with: Config.noteQrPrefix)}
     public var publicKeyQRImage:UIImage? { return publicKey?.qrCodeImage(with: Config.publicKeyQrPrefix) }    
     public var privateKeyQRImage:UIImage? { return privateKey?.qrCodeImage(with: Config.privateKeyQrPrefix) }    
     
-    public func amountQRImage(_ amount:String) -> UIImage? {
+    public func amountQRImage(assets:String, amount:String) -> UIImage? {
         var a = (publicKey ?? "") 
-        a += ":" + amount + ":" + (name ?? "")
+        a += ":" + assets + ":" + amount + ":" + (name ?? "")
         return a.qrCodeImage(with: Config.paymentQrPrefix)
     }
     
-    public static func create(name:String, secretPhrase:String?,
-                                          error: @escaping ((_ error: SessionTaskError?)-> Void),  
-                                          complete: @escaping ((_ wallet: Wallet)->Void)) {
+    public static func create(name:String, 
+                              secretPhrase:String?=nil,
+                              error: @escaping ((_ error: SessionTaskError?)-> Void),  
+                              complete: @escaping ((_ wallet: Wallet)->Void)) {
         do {
-            let keys = try MileCsa.generateKeys()         
-            complete(Wallet(name: name, publicKey: keys.publicKey, privateKey: keys.privateKey, password: secretPhrase))
+            var keys:MileCsaKeys
+            if let phrase = secretPhrase {
+                keys = try MileCsa.generateKeys(withSecretPhrase: phrase)
+            }
+            else {
+                keys = try MileCsa.generateKeys()
+            }
+            complete(Wallet(name: name, publicKey: keys.publicKey, privateKey: keys.privateKey, secretPhrase: secretPhrase))
         }
         catch let err {
             error(SessionTaskError.requestError(err))
         }
     }
-        
-    public init(name:String, publicKey:String, privateKey:String, password:String?){
+    
+    public init(name:String, privateKey:String) throws {
+        self._name = name 
+        let keys = try MileCsa.generateKeys(fromPrivateKey: privateKey)
+        self._publicKey = keys.publicKey
+        self._privateKey = keys.privateKey
+        self._secretPhrase = nil
+    }  
+    
+    public init(name:String, publicKey:String, privateKey:String, secretPhrase:String?){
         self._name = name 
         self._publicKey = publicKey
         self._privateKey = privateKey
-        self._secretPhrase = password
+        self._secretPhrase = secretPhrase
     }    
-        
+    
     fileprivate var _name:String?
     fileprivate var _secretPhrase:String?
     fileprivate var _publicKey:String?  
@@ -58,8 +73,7 @@ public struct Wallet {
 
 extension Wallet: Mappable {
     
-    public init?(map: Map) {         
-    }
+    public init?(map: Map) {}
     
     public mutating func mapping(map: Map) {
         _name          <- map["wallet_name"]
