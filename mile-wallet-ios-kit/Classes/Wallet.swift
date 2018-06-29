@@ -20,15 +20,20 @@ public struct Wallet {
     public var publicKey:String? { return _publicKey }    
     public var privateKey:String? { return _privateKey }    
     
-    public var nameQRImage:UIImage? { return name?.qrCodeImage(with: Config.nameQrPrefix) }
-    public var secretPhraseQRImage:UIImage? { return secretPhrase?.qrCodeImage(with: Config.noteQrPrefix)}
-    public var publicKeyQRImage:UIImage? { return publicKey?.qrCodeImage(with: Config.publicKeyQrPrefix) }    
-    public var privateKeyQRImage:UIImage? { return privateKey?.qrCodeImage(with: Config.privateKeyQrPrefix) }    
+    public var nameQRImage:UIImage? { return name?.qrCodeImage(with: Config.Shared.Wallet.name) }
+    public var secretPhraseQRImage:UIImage? { return secretPhrase?.qrCodeImage(with: Config.Shared.Wallet.note)}
+    public var publicKeyQRImage:UIImage? { return publicKey?.qrCodeImage(with: Config.Shared.Wallet.publicKey) }    
+    public var privateKeyQRImage:UIImage? { return privateKey?.qrCodeImage(with: Config.Shared.Wallet.privateKey) }    
     
-    public func amountQRImage(assets:String, amount:String) -> UIImage? {
+    public func paymentLink(assets:String, amount:String) -> String {
         var a = (publicKey ?? "") 
         a += ":" + assets + ":" + amount + ":" + (name ?? "")
-        return a.qrCodeImage(with: Config.paymentQrPrefix)
+        a = Config.Shared.Payment.amount + a
+        return a
+    }
+    
+    public func amountQRImage(assets:String, amount:String) -> UIImage? {
+        return UIImage.qrCode(for: paymentLink(assets: assets, amount: amount))
     }
     
     public static func create(name:String, 
