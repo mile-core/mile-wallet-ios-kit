@@ -20,10 +20,10 @@ public struct Wallet {
     public var publicKey:String? { return _publicKey }    
     public var privateKey:String? { return _privateKey }    
     
-    public var nameQRImage:UIImage? { return name?.qrCodeImage(with: Config.Shared.Wallet.name) }
-    public var secretPhraseQRImage:UIImage? { return secretPhrase?.qrCodeImage(with: Config.Shared.Wallet.note)}
-    public var publicKeyQRImage:UIImage? { return publicKey?.qrCodeImage(with: Config.Shared.Wallet.publicKey) }    
-    public var privateKeyQRImage:UIImage? { return privateKey?.qrCodeImage(with: Config.Shared.Wallet.privateKey) }    
+    public var nameQr:UIImage? { return name?.qrCodeImage(with: Config.Shared.Wallet.name) }
+    public var secretPhraseQr:UIImage? { return secretPhrase?.qrCodeImage(with: Config.Shared.Wallet.note)}
+    public var publicKeyQr:UIImage? { return publicKey?.qrCodeImage(with: Config.Shared.Wallet.publicKey) }    
+    public var privateKeyQr:UIImage? { return privateKey?.qrCodeImage(with: Config.Shared.Wallet.privateKey) }    
     
     public func paymentLink(assets:String, amount:String) -> String {
         var a = (publicKey ?? "") 
@@ -32,7 +32,7 @@ public struct Wallet {
         return a
     }
     
-    public func amountQRImage(assets:String, amount:String) -> UIImage? {
+    public func paymentQr(assets:String, amount:String) -> UIImage? {
         return UIImage.qrCode(for: paymentLink(assets: assets, amount: amount))
     }
     

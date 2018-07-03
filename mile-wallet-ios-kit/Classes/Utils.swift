@@ -99,16 +99,3 @@ public extension String {
     }
     
 }
-
-public extension UIAlertController {
-    
-    @discardableResult
-    func addAction(title: String?, style: UIAlertActionStyle = .default, handler: ((UIAlertAction) -> Void)? = nil) -> Self {
-        addAction(UIAlertAction(title: title, style: style, handler: handler))
-        return self
-    }
-    
-    func present(by viewController: UIViewController) {
-        viewController.present(self, animated: true)
-    }
-}

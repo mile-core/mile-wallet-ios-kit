@@ -10,7 +10,7 @@ import Foundation
 import APIKit
 import JSONRPCKit
 
-struct CastError<ExpectedType>: Error {
+struct MileCastError<ExpectedType>: Error {
     let actualValue: Any
     let expectedType: ExpectedType.Type
 }

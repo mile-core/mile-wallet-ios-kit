@@ -9,12 +9,12 @@
 import UIKit
 
 public struct Config {
-    public static let mileHosts = ["https://wallet.mile.global", "http://localhost:4000", "https://mile-wallet.karma.red", "https://149.28.162.70:4000"]
-        
+   
     public static let api         = "https://wallet.mile.global"    
     public static let version     = "1"
     public static let baseUrlPath = api + "/v" + version 
     public static let appSchema   = "mile-core:"
+    public static let nodesUrl    = "https://wallet.mile.global/v"+version+"/nodes.json"
     
     public struct Shared {
         public static let path = "shared"

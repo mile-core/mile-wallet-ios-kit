@@ -46,7 +46,7 @@ public struct Transfer {
             let request = MileWalletState(publicKey: from_key)
             
             let batch = batchFactory.create(request)
-            let httpRequest = MileServiceRequest(batch: batch)
+            let httpRequest = Rpc(batch: batch)
             
             Session.send(httpRequest) { (result) in
                 switch result {                
@@ -64,26 +64,20 @@ public struct Transfer {
                     }
                     
                     do {
-                        
-                        Swift.print("createTransfer: from: \(from_key, from_private_key, assetValue, amount) --> \(to_key, trxId)")
-                        
+                                                
                         let data = try MileCsa.createTransfer(MileCsaKeys(from_key, 
                                                                           privateKey: from_private_key), 
                                                               destPublicKey: to_key, 
                                                               transactionId: "\(trxId)", 
                             assets: assetValue, 
                             amount: "\(amount.floatValue)")
-                        
-                        
-                        Swift.print("createTransfer: \(data) ")
-                        
+                                                                        
                         let batchFactory = BatchFactory(version: "2.0", idGenerator: NumberIdGenerator())
                         
                         let request = MileTransferAsset(transaction_data: data)
-                        
-                        
+                                                
                         let batch = batchFactory.create(request)
-                        let httpRequest = MileServiceRequest(batch: batch)
+                        let httpRequest = Rpc(batch: batch)
                         
                         Session.send(httpRequest) { (result) in
                             switch result {    
