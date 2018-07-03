@@ -28,7 +28,7 @@ public struct MileWalletState: JSONRPCKit.Request{
         if let response = resultObject as? Response {
             return response
         } else {
-            throw CastError(actualValue: resultObject, expectedType: Response.self)
+            throw MileCastError(actualValue: resultObject, expectedType: Response.self)
         }
     }
 }

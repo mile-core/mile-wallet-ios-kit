@@ -9,13 +9,28 @@
 import UIKit
 
 public struct Config {
-    public static let mileHosts = ["https://wallet.mile.global", "http://localhost:4000", "https://mile-wallet.karma.red", "https://149.28.162.70:4000"]
+   
+    public static let api         = "https://wallet.mile.global"    
+    public static let version     = "1"
+    public static let baseUrlPath = api + "/v" + version 
+    public static let appSchema   = "mile-core:"
+    public static let nodesUrl    = "https://wallet.mile.global/v"+version+"/nodes.json"
+    
+    public struct Shared {
+        public static let path = "shared"
         
-    public static let publicKeyQrPrefix    = "MILE:PUB:"
-    public static let privateKeyQrPrefix   = "MILE:PRIV:"
-    public static let noteQrPrefix         = "MILE:NOTE:"
-    public static let nameQrPrefix         = "MILE:NOTE:NAME:"
-    public static let secretPhraseQrPrefix = "MILE:SECRET:"
-    public static let amountQrPrefix       = "MILE:AMOUNT:"
-    public static let paymentQrPrefix      = "MILE:PAYMENT:"        
+        public struct Wallet {
+            public static let publicKey    = baseUrlPath+"/" + Shared.path + "/wallet/key/public/"
+            public static let privateKey   = baseUrlPath+"/" + Shared.path + "/wallet/key/private/"
+            public static let note         = baseUrlPath+"/" + Shared.path + "/wallet/note/"
+            public static let name         = baseUrlPath+"/" + Shared.path + "/wallet/note/name/"
+            public static let secretPhrase = baseUrlPath+"/" + Shared.path + "/wallet/secret/phrase/"
+            public static let amount       = baseUrlPath+"/" + Shared.path + "/wallet/amount/"
+        }
+        
+        public struct Payment {
+            public static let publicKey   = baseUrlPath+"/" + Shared.path + "/payment/key/public/"                        
+            public static let amount      = baseUrlPath+"/" + Shared.path + "/payment/amount/"                        
+        }
+    }
 }

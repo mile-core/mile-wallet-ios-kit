@@ -26,7 +26,7 @@ public struct Transfer {
         guard let from_key = from.publicKey else { return }
         guard let to_key = to.publicKey else { return }
         guard let from_private_key = from.privateKey else { return }
-        
+                        
         
         Chain.update(error: { (err) in
             error(err)
@@ -46,7 +46,7 @@ public struct Transfer {
             let request = MileWalletState(publicKey: from_key)
             
             let batch = batchFactory.create(request)
-            let httpRequest = MileServiceRequest(batch: batch)
+            let httpRequest = Rpc(batch: batch)
             
             Session.send(httpRequest) { (result) in
                 switch result {                
@@ -64,21 +64,20 @@ public struct Transfer {
                     }
                     
                     do {
+                                                
                         let data = try MileCsa.createTransfer(MileCsaKeys(from_key, 
                                                                           privateKey: from_private_key), 
                                                               destPublicKey: to_key, 
                                                               transactionId: "\(trxId)", 
                             assets: assetValue, 
                             amount: "\(amount.floatValue)")
-                        
-                        
+                                                                        
                         let batchFactory = BatchFactory(version: "2.0", idGenerator: NumberIdGenerator())
                         
                         let request = MileTransferAsset(transaction_data: data)
-                        
-                        
+                                                
                         let batch = batchFactory.create(request)
-                        let httpRequest = MileServiceRequest(batch: batch)
+                        let httpRequest = Rpc(batch: batch)
                         
                         Session.send(httpRequest) { (result) in
                             switch result {    

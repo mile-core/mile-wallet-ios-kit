@@ -76,15 +76,26 @@ public extension String {
     }
 }
 
-public extension UIAlertController {
+public extension String {
     
-    @discardableResult
-    func addAction(title: String?, style: UIAlertActionStyle = .default, handler: ((UIAlertAction) -> Void)? = nil) -> Self {
-        addAction(UIAlertAction(title: title, style: style, handler: handler))
-        return self
+    public var qrCodePayment:(publicKey:String, assets:String?, amount:String?, name:String?)? {
+        
+        if self.hasPrefix(Config.Shared.Payment.amount) {            
+            let array = self.replacingOccurrences(of: Config.Shared.Payment.amount, with: "").components(separatedBy: ":")                            
+            if array.count == 4 {
+                return (array[0],array[1],array[2],array[3])
+            }            
+        }
+        else if self.hasPrefix(Config.Shared.Payment.publicKey) {
+            let pk = self.replacingOccurrences(of: Config.Shared.Payment.publicKey, with: "")
+            return (pk,nil,nil,nil)
+        }
+        else if self.hasPrefix(Config.Shared.Wallet.publicKey) {
+            let pk = self.replacingOccurrences(of: Config.Shared.Wallet.publicKey, with: "")
+            return (pk,nil,nil,nil)
+        }
+        
+        return nil
     }
     
-    func present(by viewController: UIViewController) {
-        viewController.present(self, animated: true)
-    }
 }

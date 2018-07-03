@@ -51,7 +51,7 @@ public struct Chain {
         let request = MileInfo()
         
         let batch = batchFactory.create(request)
-        let httpRequest = MileServiceRequest(batch: batch)
+        let httpRequest = Rpc(batch: batch)
         
         Session.send(httpRequest) { (result) in
             switch result {
