@@ -38,7 +38,7 @@ public struct Wallet {
     
     public static func create(name:String, 
                               secretPhrase:String?=nil,
-                              error: @escaping ((_ error: SessionTaskError?)-> Void),  
+                              error: @escaping ((_ error: Error?)-> Void),  
                               complete: @escaping ((_ wallet: Wallet)->Void)) {
         do {
             var keys:MileCsaKeys
@@ -51,7 +51,7 @@ public struct Wallet {
             complete(Wallet(name: name, publicKey: keys.publicKey, privateKey: keys.privateKey, secretPhrase: secretPhrase))
         }
         catch let err {
-            error(SessionTaskError.requestError(err))
+            error(err)
         }
     }
     

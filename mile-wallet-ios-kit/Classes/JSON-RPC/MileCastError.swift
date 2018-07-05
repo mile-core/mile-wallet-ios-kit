@@ -33,17 +33,23 @@ extension JSONRPCKit.JSONRPCError {
 }
 
 extension SessionTaskError {
-    public var whatResponse:String? {        
+    public var description:String? {        
         let error = self         
         var jsonrpcError:JSONRPCKit.JSONRPCError?
         
         switch error {
         case .responseError(let error), .connectionError(let error), .requestError(let error): 
-            jsonrpcError = error as? JSONRPCKit.JSONRPCError               
+            jsonrpcError = error as? JSONRPCKit.JSONRPCError
         }
         
-        guard let responseError = jsonrpcError else { return nil }
+        guard let responseError = jsonrpcError else { return error.localizedDescription }
         
         return responseError.what
     }    
+}
+
+extension Error {
+    public var description:String? {
+        return (self as? SessionTaskError)?.description ?? localizedDescription        
+    }
 }

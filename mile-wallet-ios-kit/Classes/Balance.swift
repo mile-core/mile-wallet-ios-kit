@@ -19,7 +19,7 @@ public struct Balance {
         self._balance = balance
     }
     
-    public static func update(wallet: Wallet, error: @escaping ((_ error: SessionTaskError?)-> Void),  
+    public static func update(wallet: Wallet, error: @escaping ((_ error: Error?)-> Void),  
                               complete: @escaping ((_: Balance)->Void)) {
         
         let batchFactory = BatchFactory(version: "2.0", idGenerator: NumberIdGenerator())

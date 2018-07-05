@@ -20,7 +20,7 @@ public struct Transfer {
     public static func send(asset: String, 
                             amount: String, 
                             from: Wallet, to: Wallet, 
-                            error: @escaping ((_ error: SessionTaskError?)-> Void),  
+                            error: @escaping ((_ error: Error?)-> Void),  
                             complete: @escaping ((_: Transfer)->Void)) {
         
         guard let from_key = from.publicKey else { return }
@@ -35,7 +35,7 @@ public struct Transfer {
                 sendAmount(asset: assetValue)
             }
             else {
-                error(.responseError(Chain.ChainError.assetNotFount))
+                error(Chain.ChainError.assetNotFount)
             }
         }     
         
@@ -54,12 +54,12 @@ public struct Transfer {
                     
                     
                     guard let trxIdObj = response["last_transaction_id"] else {
-                        error(.responseError(ResponseError.unexpectedObject(response)))
+                        error(ResponseError.unexpectedObject(response))
                         return
                     }
                     
                     guard let trxId = Int("\(trxIdObj)") else {
-                        error(.responseError(ResponseError.unexpectedObject(trxIdObj)))
+                        error(ResponseError.unexpectedObject(trxIdObj))
                         return                    
                     }
                     
@@ -92,7 +92,8 @@ public struct Transfer {
                         }  
                     }
                     catch let err {
-                        error(SessionTaskError.requestError(err))
+                        Swift.print(" MileTransferAsset: error.... \(err.localizedDescription)")
+                        error(err)
                     }
                 case .failure(let er):                
                     error(er)

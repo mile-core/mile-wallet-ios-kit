@@ -38,7 +38,7 @@ public struct Chain {
         return nil
     }
     
-    public static func update(error: @escaping ((_ error: SessionTaskError?)-> Void),  
+    public static func update(error: @escaping ((_ error: Error?)-> Void),  
                        complete: @escaping ((_ chain: Chain)->Void)) {
         
         if let chain = Chain._shared {
@@ -60,7 +60,7 @@ public struct Chain {
                                                                 
                 guard let assets = response["supported_assets"] as? NSArray else {
                     Chain._shared = nil
-                    error(.responseError(ResponseError.unexpectedObject(response)))
+                    error(ResponseError.unexpectedObject(response))
                     return
                 }
                 
@@ -76,13 +76,13 @@ public struct Chain {
                 
                 guard let v = response["version"] as? String else  {
                     Chain._shared = nil
-                    error(.responseError(ResponseError.unexpectedObject(response)))
+                    error(ResponseError.unexpectedObject(response))
                     return                     
                 } 
                 
                 guard let trx = response["supported_transactions"] as? NSArray as? Array<String> else {
                     Chain._shared = nil
-                    error(.responseError(ResponseError.unexpectedObject(response)))
+                    error(ResponseError.unexpectedObject(response))
                     return                     
                 }                                                             
                 
