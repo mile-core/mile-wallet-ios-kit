@@ -16,7 +16,7 @@ public struct Rpc<Batch: JSONRPCKit.Batch>: APIKit.Request {
     public typealias Response = Batch.Responses
     
     public var baseURL: URL {  
-        return SharedRpc.default.url
+        return  SharedRpc.default.url
     }
     
     public var method: HTTPMethod {

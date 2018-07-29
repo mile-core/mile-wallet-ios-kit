@@ -10,12 +10,13 @@ import UIKit
 
 public struct Config {
    
-    public static let api         = "https://wallet.mile.global"    
+    public static var url         = "https://wallet.mile.global"
+    public static var api:String {return url}
     public static let version     = "1"
     public static let baseUrlPath = api + "/v" + version 
     public static let appSchema   = "mile-core:"
-    public static let nodesUrl    = "https://wallet.mile.global/v"+version+"/nodes.json"
-    
+    public static let nodesUrl    = url + "/v"+version+"/nodes.json"
+
     public struct Shared {
         public static let path = "shared"
         

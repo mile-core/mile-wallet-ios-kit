@@ -13,13 +13,14 @@ import ObjectMapper
 import EFQRCode 
 import MileCsaLight
 
+
 public struct Wallet {    
     
     public var name:String? { return _name }
     public var secretPhrase:String? { return _secretPhrase}
     public var publicKey:String? { return _publicKey }    
     public var privateKey:String? { return _privateKey }    
-    
+
     public var nameQr:UIImage? { return name?.qrCodeImage(with: Config.Shared.Wallet.name) }
     public var secretPhraseQr:UIImage? { return secretPhrase?.qrCodeImage(with: Config.Shared.Wallet.note)}
     public var publicKeyQr:UIImage? { return publicKey?.qrCodeImage(with: Config.Shared.Wallet.publicKey) }    
@@ -84,6 +85,6 @@ extension Wallet: Mappable {
         _name          <- map["wallet_name"]
         _secretPhrase  <- map["secret_phrase"]    
         _publicKey     <- map["public_key"]    
-        _privateKey    <- map["private_key"]    
+        _privateKey    <- map["private_key"]
     }
 }

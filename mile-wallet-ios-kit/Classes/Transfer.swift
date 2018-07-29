@@ -35,7 +35,7 @@ public struct Transfer {
                 sendAmount(asset: assetValue)
             }
             else {
-                error(Chain.ChainError.assetNotFount)
+                error(Chain.ChainError.assetNotFound)
             }
         }     
         
