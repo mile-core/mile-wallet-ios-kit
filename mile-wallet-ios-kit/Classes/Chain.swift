@@ -11,11 +11,51 @@ import APIKit
 import JSONRPCKit
 import ObjectMapper
 
+public enum Asset {
+    case xdr
+    case mile
+    
+    public init?(name:String) {
+        switch name {
+        case Asset.mile.name:
+            self = Asset.mile
+        case Asset.xdr.name:
+            self = Asset.xdr
+        default:
+            return nil
+        }
+    }
+    
+    public var name:String {
+        switch self {
+        case .mile:
+            return "MILE"
+        case .xdr:
+            return "XDR"
+        }
+    }
+    
+    public var precision:Int {
+        switch self {
+        case .mile:
+            return 5
+        case .xdr:
+            return 2
+        }
+    }
+    
+    public static var list:[Asset] = [.mile, .xdr]
+    
+    public func stringValue(_ v:Float) -> String {
+        return String(format: "%.\(precision)f", v)
+    }
+}
+
 public struct Chain {
     
     public enum ChainError: Error{
         case versionWrong
-        case assetNotFount
+        case assetNotFound
         case transactionTypeNotFount
     }
     
@@ -31,14 +71,25 @@ public struct Chain {
         self._assets = assets
     }
     
-    func assetCode(of name: String) -> UInt16? {        
+    public func assetCode(of name: String) -> UInt16? {
         if let index = assets.index(where: { return $1 == name }) {
             return UInt16(assets[index].key)
         }        
         return nil
     }
     
-    public static func update(error: @escaping ((_ error: SessionTaskError?)-> Void),  
+    public func asset(name:String) -> Asset? {
+        switch name {
+        case "MILE":
+            return Asset.mile
+        case "XDR":
+            return Asset.xdr
+        default:
+            return nil
+        }
+    }
+    
+    public static func update(error: @escaping ((_ error: Error?)-> Void),  
                        complete: @escaping ((_ chain: Chain)->Void)) {
         
         if let chain = Chain._shared {
@@ -60,7 +111,7 @@ public struct Chain {
                                                                 
                 guard let assets = response["supported_assets"] as? NSArray else {
                     Chain._shared = nil
-                    error(.responseError(ResponseError.unexpectedObject(response)))
+                    error(ResponseError.unexpectedObject(response))
                     return
                 }
                 
@@ -76,13 +127,13 @@ public struct Chain {
                 
                 guard let v = response["version"] as? String else  {
                     Chain._shared = nil
-                    error(.responseError(ResponseError.unexpectedObject(response)))
+                    error(ResponseError.unexpectedObject(response))
                     return                     
                 } 
                 
                 guard let trx = response["supported_transactions"] as? NSArray as? Array<String> else {
                     Chain._shared = nil
-                    error(.responseError(ResponseError.unexpectedObject(response)))
+                    error(ResponseError.unexpectedObject(response))
                     return                     
                 }                                                             
                 

@@ -10,27 +10,28 @@ import UIKit
 
 public struct Config {
    
-    public static let api         = "https://wallet.mile.global"    
-    public static let version     = "1"
-    public static let baseUrlPath = api + "/v" + version 
-    public static let appSchema   = "mile-core:"
-    public static let nodesUrl    = "https://wallet.mile.global/v"+version+"/nodes.json"
-    
+    public static let version            = "1"
+    public static let appSchema          = "mile-core:"
+    public static var url                = "https://wallet.mile.global"
+    public static var api:String         { return url }
+    public static var baseUrlPath:String { return api + "/v" + version }
+    public static var nodesUrl:String    { return url + "/v" + version + "/nodes.json"}
+
     public struct Shared {
         public static let path = "shared"
         
         public struct Wallet {
-            public static let publicKey    = baseUrlPath+"/" + Shared.path + "/wallet/key/public/"
-            public static let privateKey   = baseUrlPath+"/" + Shared.path + "/wallet/key/private/"
-            public static let note         = baseUrlPath+"/" + Shared.path + "/wallet/note/"
-            public static let name         = baseUrlPath+"/" + Shared.path + "/wallet/note/name/"
-            public static let secretPhrase = baseUrlPath+"/" + Shared.path + "/wallet/secret/phrase/"
-            public static let amount       = baseUrlPath+"/" + Shared.path + "/wallet/amount/"
+            public static var publicKey:String    { return baseUrlPath+"/" + Shared.path + "/wallet/key/public/" }
+            public static var privateKey:String   { return baseUrlPath+"/" + Shared.path + "/wallet/key/private/" }
+            public static var note:String         { return baseUrlPath+"/" + Shared.path + "/wallet/note/" }
+            public static var name:String         { return baseUrlPath+"/" + Shared.path + "/wallet/note/name/" }
+            public static var secretPhrase:String { return baseUrlPath+"/" + Shared.path + "/wallet/secret/phrase/" }
+            public static var amount:String       { return baseUrlPath+"/" + Shared.path + "/wallet/amount/"}
         }
         
         public struct Payment {
-            public static let publicKey   = baseUrlPath+"/" + Shared.path + "/payment/key/public/"                        
-            public static let amount      = baseUrlPath+"/" + Shared.path + "/payment/amount/"                        
+            public static var publicKey:String   { return baseUrlPath+"/" + Shared.path + "/payment/key/public/" }
+            public static var amount:String      { return baseUrlPath+"/" + Shared.path + "/payment/amount/" }
         }
     }
 }

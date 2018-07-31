@@ -13,34 +13,53 @@ import ObjectMapper
 
 public struct Balance {
     
-    public var balance:[String:String] { return _balance }    
+    public var balance:[String:String] { return _balance }
+    
+    public func amount(_ asset_code:UInt16) -> Float? {
+        if let idx = balance.index(where: { (k,v) -> Bool in
+            return k == "\(asset_code)"
+        }) {
+            return balance[idx].value.floatValue
+        }
+        return nil
+    }
     
     public init(balance:[String:String]){
         self._balance = balance
     }
     
-    public static func update(wallet: Wallet, error: @escaping ((_ error: SessionTaskError?)-> Void),  
+    public static func update(wallet: Wallet, error: @escaping ((_ error: Error?)-> Void),  
                               complete: @escaping ((_: Balance)->Void)) {
         
         let batchFactory = BatchFactory(version: "2.0", idGenerator: NumberIdGenerator())
         
-        guard let pk = wallet.publicKey else { return }
+        guard let pk = wallet.publicKey else {
+            error(NSError(domain: "global.mile.wallet",
+                          code: 0,
+                          userInfo: [NSLocalizedDescriptionKey:
+                            NSLocalizedString("Public key is not valid", comment: "")]))
+            return
+        }
         
         let request = MileWalletState(publicKey: pk)
-    
-        
+            
         let batch = batchFactory.create(request)
         let httpRequest = Rpc(batch: batch)
         
         Session.send(httpRequest) { (result) in
+            
             switch result {
                 
             case .success(let response):
                 
                 guard let bal = response["balance"] as? NSArray as? Array<AnyObject?> else {
+                    error(NSError(domain: "global.mile.wallet",
+                                  code: 0,
+                                  userInfo: [NSLocalizedDescriptionKey:
+                                    NSLocalizedString("Balance getting error. Check network connection", comment: "")]))
                     return
                 }
-                
+            
                 var balance:[String:String] = [:]
                 
                 for b in bal {
@@ -50,7 +69,8 @@ public struct Balance {
                         balance["\(code)"] = "\(amount)" 
                     }
                 }                
-                                
+            
+                
                 complete(Balance(balance: balance))                     
                 
             case .failure(let er):                

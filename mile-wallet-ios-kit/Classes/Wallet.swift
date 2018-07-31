@@ -13,17 +13,24 @@ import ObjectMapper
 import EFQRCode 
 import MileCsaLight
 
+
 public struct Wallet {    
     
     public var name:String? { return _name }
     public var secretPhrase:String? { return _secretPhrase}
     public var publicKey:String? { return _publicKey }    
     public var privateKey:String? { return _privateKey }    
-    
+
     public var nameQr:UIImage? { return name?.qrCodeImage(with: Config.Shared.Wallet.name) }
     public var secretPhraseQr:UIImage? { return secretPhrase?.qrCodeImage(with: Config.Shared.Wallet.note)}
     public var publicKeyQr:UIImage? { return publicKey?.qrCodeImage(with: Config.Shared.Wallet.publicKey) }    
     public var privateKeyQr:UIImage? { return privateKey?.qrCodeImage(with: Config.Shared.Wallet.privateKey) }    
+    
+    public func publicKeyLink() -> String {
+        var a = (publicKey ?? "")
+        a = Config.Shared.Wallet.publicKey + a
+        return a
+    }
     
     public func paymentLink(assets:String, amount:String) -> String {
         var a = (publicKey ?? "") 
@@ -38,7 +45,7 @@ public struct Wallet {
     
     public static func create(name:String, 
                               secretPhrase:String?=nil,
-                              error: @escaping ((_ error: SessionTaskError?)-> Void),  
+                              error: @escaping ((_ error: Error?)-> Void),  
                               complete: @escaping ((_ wallet: Wallet)->Void)) {
         do {
             var keys:MileCsaKeys
@@ -51,7 +58,7 @@ public struct Wallet {
             complete(Wallet(name: name, publicKey: keys.publicKey, privateKey: keys.privateKey, secretPhrase: secretPhrase))
         }
         catch let err {
-            error(SessionTaskError.requestError(err))
+            error(err)
         }
     }
     
@@ -84,6 +91,6 @@ extension Wallet: Mappable {
         _name          <- map["wallet_name"]
         _secretPhrase  <- map["secret_phrase"]    
         _publicKey     <- map["public_key"]    
-        _privateKey    <- map["private_key"]    
+        _privateKey    <- map["private_key"]
     }
 }
