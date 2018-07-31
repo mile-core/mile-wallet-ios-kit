@@ -26,6 +26,12 @@ public struct Wallet {
     public var publicKeyQr:UIImage? { return publicKey?.qrCodeImage(with: Config.Shared.Wallet.publicKey) }    
     public var privateKeyQr:UIImage? { return privateKey?.qrCodeImage(with: Config.Shared.Wallet.privateKey) }    
     
+    public func publicKeyLink() -> String {
+        var a = (publicKey ?? "")
+        a = Config.Shared.Wallet.publicKey + a
+        return a
+    }
+    
     public func paymentLink(assets:String, amount:String) -> String {
         var a = (publicKey ?? "") 
         a += ":" + assets + ":" + amount + ":" + (name ?? "")

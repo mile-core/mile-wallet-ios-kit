@@ -15,6 +15,17 @@ public enum Asset {
     case xdr
     case mile
     
+    public init?(name:String) {
+        switch name {
+        case Asset.mile.name:
+            self = Asset.mile
+        case Asset.xdr.name:
+            self = Asset.xdr
+        default:
+            return nil
+        }
+    }
+    
     public var name:String {
         switch self {
         case .mile:
