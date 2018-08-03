@@ -58,9 +58,18 @@ public struct Transfer {
                         return
                     }
                     
-                    guard let trxId = Int("\(trxIdObj)") else {
+                    guard var trxId = Int("\(trxIdObj)") else {
                         error(ResponseError.unexpectedObject(trxIdObj))
                         return                    
+                    }
+                    
+                    if let lastId = self.idCache[from_key] {
+                        if lastId == trxId {
+                            //
+                            // last transaction is in progress
+                            //
+                            trxId += 1                            
+                        }
                     }
                     
                     do {
@@ -84,6 +93,8 @@ public struct Transfer {
                                 
                             case .success(let response):
                                 
+                                self.idCache[from_key] = trxId
+                                
                                 complete(Transfer(_transactionData: data, _result: response))                     
                                 
                             case .failure(let er):                
@@ -100,7 +111,9 @@ public struct Transfer {
                 }
             }    
         }
-    }    
+    }
+    
+    private static var idCache:[String:Int] = [:]
     
     fileprivate var _transactionData:String?      
     fileprivate var _result:Bool = false      
