@@ -52,7 +52,6 @@ public struct Transfer {
                 switch result {                
                 case .success(let response):
                     
-                    
                     guard let trxIdObj = response["last_transaction_id"] else {
                         error(ResponseError.unexpectedObject(response))
                         return
@@ -63,12 +62,13 @@ public struct Transfer {
                         return                    
                     }
                     
-                    if let lastId = self.idCache[from_key] {
-                        if lastId == trxId {
+                    if let lastId = Transfer.getLastId(from_key) {
+
+                        if lastId >= trxId && trxId > 0 {
                             //
                             // last transaction is in progress
                             //
-                            trxId += 1                            
+                            trxId = lastId + 1
                         }
                     }
                     
@@ -93,7 +93,7 @@ public struct Transfer {
                                 
                             case .success(let response):
                                 
-                                self.idCache[from_key] = trxId
+                                Transfer.setLastId(from_key, id: trxId)
                                 
                                 complete(Transfer(_transactionData: data, _result: response))                     
                                 
@@ -113,7 +113,16 @@ public struct Transfer {
         }
     }
     
-    private static var idCache:[String:Int] = [:]
+    fileprivate static func getLastId(_ key:String) -> Int? {
+        return UserDefaults.standard.integer(forKey:key+":last-transaction-id")
+    }
+
+    fileprivate static func setLastId(_ key:String, id:Int) {
+        UserDefaults.standard.set(id, forKey: key+":last-transaction-id")
+        UserDefaults.standard.synchronize()
+    }
+
+   // private static var idCache:[String:Int] = [:]
     
     fileprivate var _transactionData:String?      
     fileprivate var _result:Bool = false      
