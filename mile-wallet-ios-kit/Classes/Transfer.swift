@@ -52,15 +52,24 @@ public struct Transfer {
                 switch result {                
                 case .success(let response):
                     
-                    
                     guard let trxIdObj = response["last_transaction_id"] else {
                         error(ResponseError.unexpectedObject(response))
                         return
                     }
                     
-                    guard let trxId = Int("\(trxIdObj)") else {
+                    guard var trxId = Int("\(trxIdObj)") else {
                         error(ResponseError.unexpectedObject(trxIdObj))
                         return                    
+                    }
+                    
+                    if let lastId = Transfer.getLastId(from_key) {
+
+                        if lastId >= trxId && trxId > 0 {
+                            //
+                            // last transaction is in progress
+                            //
+                            trxId = lastId + 1
+                        }
                     }
                     
                     do {
@@ -84,6 +93,8 @@ public struct Transfer {
                                 
                             case .success(let response):
                                 
+                                Transfer.setLastId(from_key, id: trxId)
+                                
                                 complete(Transfer(_transactionData: data, _result: response))                     
                                 
                             case .failure(let er):                
@@ -100,7 +111,18 @@ public struct Transfer {
                 }
             }    
         }
-    }    
+    }
+    
+    fileprivate static func getLastId(_ key:String) -> Int? {
+        return UserDefaults.standard.integer(forKey:key+":last-transaction-id")
+    }
+
+    fileprivate static func setLastId(_ key:String, id:Int) {
+        UserDefaults.standard.set(id, forKey: key+":last-transaction-id")
+        UserDefaults.standard.synchronize()
+    }
+
+   // private static var idCache:[String:Int] = [:]
     
     fileprivate var _transactionData:String?      
     fileprivate var _result:Bool = false      
