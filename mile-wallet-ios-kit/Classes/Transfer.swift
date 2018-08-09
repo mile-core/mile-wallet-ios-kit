@@ -114,15 +114,13 @@ public struct Transfer {
     }
     
     fileprivate static func getLastId(_ key:String) -> Int? {
-        return UserDefaults.standard.integer(forKey:key+":last-transaction-id")
+        return UserDefaults.standard.integer(forKey:key+":last-transaction-id"+Config.baseUrlPath)
     }
 
     fileprivate static func setLastId(_ key:String, id:Int) {
-        UserDefaults.standard.set(id, forKey: key+":last-transaction-id")
+        UserDefaults.standard.set(id, forKey: key+":last-transaction-id:"+Config.baseUrlPath)
         UserDefaults.standard.synchronize()
     }
-
-   // private static var idCache:[String:Int] = [:]
     
     fileprivate var _transactionData:String?      
     fileprivate var _result:Bool = false      
