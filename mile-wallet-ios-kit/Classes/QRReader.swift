@@ -41,9 +41,11 @@ public class QRReader: QRCodeReaderViewControllerDelegate {
             $0.reader                  = QRCodeReader(metadataObjectTypes:  [.qr], 
                                                       captureDevicePosition: .back)
             $0.showTorchButton         = true
+            $0.showSwitchCameraButton = false
             $0.preferredStatusBarStyle = .lightContent
-            
+            $0.cancelButtonTitle = NSLocalizedString("Cancel", comment:"")
             $0.reader.stopScanningWhenCodeIsFound = false
+            
         }
         
         return QRCodeReaderViewController(builder: builder)
