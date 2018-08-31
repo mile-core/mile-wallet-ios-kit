@@ -77,7 +77,7 @@ public struct Transfer {
                         let data = try MileCsa.createTransfer(MileCsaKeys(from_key, 
                                                                           privateKey: from_private_key), 
                                                               destPublicKey: to_key, 
-                                                              transactionId: "\(trxId)", 
+                                                              transactionId: UInt64(trxId), 
                             assets: assetValue, 
                             amount: "\(amount.floatValue)")
                                                                         

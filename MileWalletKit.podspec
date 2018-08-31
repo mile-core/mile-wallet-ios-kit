@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "MileWalletKit"
-  s.version      = "0.5.1"
+  s.version      = "0.6.0"
   s.summary      = "MileWalletKit is a SDK connects Mile nodes"
   s.description  = "MileWalletKit is a SDK helps to manage Mile wallets and interacts with Mile nodes."                   
 
