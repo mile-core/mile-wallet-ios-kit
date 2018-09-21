@@ -12,6 +12,7 @@ import JSONRPCKit
 import ObjectMapper
 
 public enum Asset {
+    
     case xdr
     case mile
     
@@ -46,8 +47,12 @@ public enum Asset {
     
     public static var list:[Asset] = [.mile, .xdr]
     
-    public func stringValue(_ v:Float) -> String {
-        return String(format: "%.\(precision)f", v)
+    public func stringValue(_ balance:Float) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = precision
+        formatter.minimumFractionDigits = precision
+        return formatter.string(from: NSNumber(value: balance)) ?? "-"
     }
 }
 
