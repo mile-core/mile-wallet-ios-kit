@@ -17,7 +17,7 @@ public struct MileTransferAsset: JSONRPCKit.Request{
     public var transaction_data: String
     
     public var method: String {
-        return "send-signed-transaction"
+        return "send-transaction"
     }
     
     public var parameters: Any? {

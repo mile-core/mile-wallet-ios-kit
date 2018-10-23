@@ -65,7 +65,7 @@ public struct Balance {
                 for b in bal {
                     if let o = b as? NSDictionary, 
                         let amount = o["amount"],
-                        let code = o["asset_code"]{
+                        let code = o["code"]{
                         balance["\(code)"] = "\(amount)" 
                     }
                 }                

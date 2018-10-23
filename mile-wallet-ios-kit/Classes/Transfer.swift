@@ -52,7 +52,7 @@ public struct Transfer {
                 switch result {                
                 case .success(let response):
                     
-                    guard let trxIdObj = response["last_transaction_id"] else {
+                    guard let trxIdObj = response["last-transaction-id"] else {
                         error(ResponseError.unexpectedObject(response))
                         return
                     }
@@ -74,12 +74,12 @@ public struct Transfer {
                     
                     do {
                                                 
-                        let data = try MileCsa.createTransfer(MileCsaKeys(from_key, 
-                                                                          privateKey: from_private_key), 
-                                                              destPublicKey: to_key, 
-                                                              transactionId: UInt64(trxId), 
-                            assets: assetValue, 
-                            amount: "\(amount.floatValue)")
+                        let data = try MileCsaTransaction.createTransfer(MileCsaKeys(from_key,
+                                                                                     privateKey: from_private_key),
+                                                                         destPublicKey: to_key,
+                                                                         transactionId: UInt64(trxId),
+                                                                         assets: assetValue,
+                                                                         amount: "\(amount.floatValue)")
                                                                         
                         let batchFactory = BatchFactory(version: "2.0", idGenerator: NumberIdGenerator())
                         

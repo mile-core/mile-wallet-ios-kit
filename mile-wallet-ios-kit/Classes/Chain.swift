@@ -114,7 +114,7 @@ public struct Chain {
                 
             case .success(let response):
                                                                 
-                guard let assets = response["supported_assets"] as? NSArray else {
+                guard let assets = response["supported-assets"] as? NSArray else {
                     Chain._shared = nil
                     error(ResponseError.unexpectedObject(response))
                     return
@@ -136,7 +136,7 @@ public struct Chain {
                     return                     
                 } 
                 
-                guard let trx = response["supported_transactions"] as? NSArray as? Array<String> else {
+                guard let trx = response["supported-transaction-types"] as? NSArray as? Array<String> else {
                     Chain._shared = nil
                     error(ResponseError.unexpectedObject(response))
                     return                     
@@ -160,7 +160,6 @@ public struct Chain {
     fileprivate var _assets:[String:String] = [:]
     
     private static var _shared:Chain?
-
 }
 
 extension Chain:Mappable {
