@@ -34,7 +34,7 @@ public struct Balance {
         let batchFactory = BatchFactory(version: "2.0", idGenerator: NumberIdGenerator())
         
         guard let pk = wallet.publicKey else {
-            error(NSError(domain: "global.mile.wallet",
+            error(NSError(domain: "global.mile.wallet.app",
                           code: 0,
                           userInfo: [NSLocalizedDescriptionKey:
                             NSLocalizedString("Public key is not valid", comment: "")]))
@@ -53,7 +53,7 @@ public struct Balance {
             case .success(let response):
                 
                 guard let bal = response["balance"] as? NSArray as? Array<AnyObject?> else {
-                    error(NSError(domain: "global.mile.wallet",
+                    error(NSError(domain: "global.mile.wallet.app",
                                   code: 0,
                                   userInfo: [NSLocalizedDescriptionKey:
                                     NSLocalizedString("Balance getting error. Check network connection", comment: "")]))
