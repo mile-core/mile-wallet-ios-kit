@@ -50,10 +50,10 @@ public struct Wallet {
         do {
             var keys:MileCsaKeys
             if let phrase = secretPhrase {
-                keys = try MileCsa.generateKeys(withSecretPhrase: phrase)
+                keys = try MileCsaKeys.withSecretPhrase(phrase)
             }
             else {
-                keys = try MileCsa.generateKeys()
+                keys = try MileCsaKeys.random()
             }
             complete(Wallet(name: name, publicKey: keys.publicKey, privateKey: keys.privateKey, secretPhrase: secretPhrase))
         }
@@ -64,7 +64,7 @@ public struct Wallet {
     
     public init(name:String, privateKey:String) throws {
         self._name = name 
-        let keys = try MileCsa.generateKeys(fromPrivateKey: privateKey)
+        let keys = try MileCsaKeys.fromPrivateKey(privateKey)
         self._publicKey = keys.publicKey
         self._privateKey = keys.privateKey
         self._secretPhrase = nil

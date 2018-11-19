@@ -16,7 +16,8 @@ public struct Config {
     public static var api:String         { return url }
     public static var baseUrlPath:String { return api + "/v" + version }
     public static var nodesUrl:String    { return url + "/v" + version + "/nodes.json"}
-
+    public static var useBalancing:Bool  = true
+    
     public struct Shared {
         public static let path = "shared"
         

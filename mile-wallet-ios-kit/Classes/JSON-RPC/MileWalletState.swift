@@ -38,6 +38,6 @@ extension MileWalletState: Mappable {
         return nil
     }    
     public mutating func mapping(map: Map) {
-        publicKey <- map["public_key"]
+        publicKey <- map["public-key"]
     }
 }

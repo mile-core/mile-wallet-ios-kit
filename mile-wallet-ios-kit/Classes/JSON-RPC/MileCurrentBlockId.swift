@@ -1,35 +1,31 @@
 //
-//  MileTransferAsset.swift
-//  MileWallet
+//  MileCurrentBlockId.swift
+//  Pods
 //
-//  Created by denis svinarchuk on 08.06.2018.
-//  Copyright © 2018 Karma.red. All rights reserved.
+//  Created by denn on 19/11/2018.
 //
 
 import Foundation
 import JSONRPCKit
 import ObjectMapper
 
-public struct MileTransferAsset: JSONRPCKit.Request{
+public struct MileCurrentBlockId: JSONRPCKit.Request{
     
-    public typealias Response = Bool
-    
-    public var data: Any
+    public typealias Response = [String:Any]
     
     public var method: String {
-        return "send-transaction"
+        return "get-current-block-id"
     }
     
     public var parameters: Any? {
-        return data
+        return []
     }
     
     public func response(from resultObject: Any) throws -> Response {
-        if let response = Response("\(resultObject)") {
+        if let response = resultObject as? Response {
             return response
         } else {
             throw MileCastError(actualValue: resultObject, expectedType: Response.self)
         }
     }
 }
-
