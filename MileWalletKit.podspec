@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "MileWalletKit"
-  s.version      = "0.6.0"
+  s.version      = "0.8.0"
   s.summary      = "MileWalletKit is a SDK connects Mile nodes"
   s.description  = "MileWalletKit is a SDK helps to manage Mile wallets and interacts with Mile nodes."                   
 
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios
   s.platform     = :osx
 
-  s.ios.deployment_target = "10.0"
+  s.ios.deployment_target = "11.0"
   s.osx.deployment_target = "10.12"
 
   s.source       = { :git => "https://bitbucket.org/mile-core/mile-wallet-ios-kit", :tag => "#{s.version}" }
@@ -27,6 +27,8 @@ Pod::Spec.new do |s|
 
   s.frameworks = "Foundation"
   s.libraries  = 'c++'
+
+  s.swift_version = "4.2"
 
   s.dependency 'KeychainAccess'
   s.dependency 'JSONRPCKit'

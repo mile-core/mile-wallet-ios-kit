@@ -36,6 +36,15 @@ public enum Asset {
         }
     }
     
+    public var code:UInt16 {
+        switch self {
+        case .mile:
+            return 1
+        case .xdr:
+            return 0
+        }
+    }
+    
     public var precision:Int {
         switch self {
         case .mile:

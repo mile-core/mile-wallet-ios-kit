@@ -15,8 +15,8 @@ public struct Rpc<Batch: JSONRPCKit.Batch>: APIKit.Request {
     
     public typealias Response = Batch.Responses
     
-    public var baseURL: URL {  
-        return  SharedRpc.default.url
+    public var baseURL: URL {
+        return SharedRpc.default.url
     }
     
     public var method: HTTPMethod {
@@ -50,7 +50,7 @@ public class SharedRpc {
             return _baseUrl
         }
         let url   = nodes[SharedRpc._current_url_index%nodes.count]
-        SharedRpc._current_url_index += 1
+        SharedRpc._current_url_index += 1    
         return url
     }
     

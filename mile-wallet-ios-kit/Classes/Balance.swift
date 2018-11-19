@@ -13,18 +13,22 @@ import ObjectMapper
 
 public struct Balance {
     
-    public var balance:[String:String] { return _balance }
+    //private var balance:[UInt16:String] { return _balance }
+    
+    public var available_assets:[UInt16] {
+        return _balance.keys.compactMap{return $0}
+    }
     
     public func amount(_ asset_code:UInt16) -> Float? {
-        if let idx = balance.index(where: { (k,v) -> Bool in
-            return k == "\(asset_code)"
+        if let idx = _balance.index(where: { (k,v) -> Bool in
+            return k == asset_code
         }) {
-            return balance[idx].value.floatValue
+            return _balance[idx].value.floatValue
         }
         return nil
     }
     
-    public init(balance:[String:String]){
+    public init(balance:[UInt16:String]){
         self._balance = balance
     }
     
@@ -51,35 +55,38 @@ public struct Balance {
             switch result {
                 
             case .success(let response):
-                
+                                
                 guard let bal = response["balance"] as? NSArray as? Array<AnyObject?> else {
-                    error(NSError(domain: "global.mile.wallet",
-                                  code: 0,
-                                  userInfo: [NSLocalizedDescriptionKey:
-                                    NSLocalizedString("Balance getting error. Check network connection", comment: "")]))
+                    //error(NSError(domain: "global.mile.wallet",
+                    //              code: 0,
+                    //              userInfo: [NSLocalizedDescriptionKey:
+                    //                NSLocalizedString("Balance getting error. Check network connection", comment: "")]))
+                    complete(Balance(balance: [:]))
                     return
                 }
             
-                var balance:[String:String] = [:]
+                var balance:[UInt16:String] = [:]
                 
                 for b in bal {
                     if let o = b as? NSDictionary, 
                         let amount = o["amount"],
-                        let code = o["code"]{
-                        balance["\(code)"] = "\(amount)" 
+                        let code_as_string = o["code"],
+                        let code = UInt16("\(code_as_string)") {
+                        balance[code] = "\(amount)"
                     }
-                }                
-            
+                }
                 
                 complete(Balance(balance: balance))                     
                 
-            case .failure(let er):                
+            case .failure(let er):
+                
+                Swift.print("balance error: >>> \(error)")
                 error(er)
             }
         }     
     }    
     
-    fileprivate var _balance:[String:String] = [:]    
+    fileprivate var _balance:[UInt16:String] = [:]    
 }
 
 extension Balance:Mappable {
