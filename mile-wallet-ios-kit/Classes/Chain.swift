@@ -12,6 +12,7 @@ import JSONRPCKit
 import ObjectMapper
 
 public enum Asset {
+    
     case xdr
     case mile
     
@@ -35,6 +36,15 @@ public enum Asset {
         }
     }
     
+    public var code:UInt16 {
+        switch self {
+        case .mile:
+            return 1
+        case .xdr:
+            return 0
+        }
+    }
+    
     public var precision:Int {
         switch self {
         case .mile:
@@ -46,8 +56,12 @@ public enum Asset {
     
     public static var list:[Asset] = [.mile, .xdr]
     
-    public func stringValue(_ v:Float) -> String {
-        return String(format: "%.\(precision)f", v)
+    public func stringValue(_ balance:Float) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = precision
+        formatter.minimumFractionDigits = precision
+        return formatter.string(from: NSNumber(value: balance)) ?? "-"
     }
 }
 
@@ -109,7 +123,7 @@ public struct Chain {
                 
             case .success(let response):
                                                                 
-                guard let assets = response["supported_assets"] as? NSArray else {
+                guard let assets = response["supported-assets"] as? NSArray else {
                     Chain._shared = nil
                     error(ResponseError.unexpectedObject(response))
                     return
@@ -131,7 +145,7 @@ public struct Chain {
                     return                     
                 } 
                 
-                guard let trx = response["supported_transactions"] as? NSArray as? Array<String> else {
+                guard let trx = response["supported-transaction-types"] as? NSArray as? Array<String> else {
                     Chain._shared = nil
                     error(ResponseError.unexpectedObject(response))
                     return                     
@@ -155,7 +169,6 @@ public struct Chain {
     fileprivate var _assets:[String:String] = [:]
     
     private static var _shared:Chain?
-
 }
 
 extension Chain:Mappable {

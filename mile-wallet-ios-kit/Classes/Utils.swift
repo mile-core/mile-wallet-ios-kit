@@ -39,7 +39,7 @@ public func groupBy<C: Collection, K: Hashable>(_ xs: C, key: (C.Iterator.Elemen
 public extension UIImage {
     
     public var base64:String? {
-        return UIImagePNGRepresentation(self)?.base64EncodedString() 
+        return self.pngData()?.base64EncodedString() 
     }
 
     public var imageSrc:String {
@@ -51,7 +51,7 @@ public extension UIImage {
     
     public static func qrCode(for content: String) -> UIImage? {
         if let tryImage = EFQRCode.generate(content: content) {
-            return UIImage(cgImage: tryImage, scale: 1, orientation: UIImageOrientation.up)
+            return UIImage(cgImage: tryImage, scale: 1, orientation: UIImage.Orientation.up)
         } 
         return nil
     }        

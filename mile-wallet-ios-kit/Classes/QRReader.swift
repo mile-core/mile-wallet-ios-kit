@@ -64,7 +64,7 @@ public class QRReader: QRCodeReaderViewControllerDelegate {
                 
                 alert.addAction(UIAlertAction(title: "Setting", style: .default, handler: { (_) in
                     DispatchQueue.main.async {
-                        if let settingsURL = URL(string: UIApplicationOpenSettingsURLString) {
+                        if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
                             UIApplication.shared.open(settingsURL, options: [:], completionHandler: { (flag) in
                                 
                             }) //.openURL(settingsURL)
