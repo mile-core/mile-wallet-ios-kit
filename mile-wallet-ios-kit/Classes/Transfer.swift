@@ -97,7 +97,6 @@ public struct Transfer {
                                     trx_id: trx_id, error: error, complete: complete)
                             }
                             catch let err {
-                                Swift.print(" MileTransferAsset: error.... \(err.localizedDescription)")
                                 error(err)
                             }
                             

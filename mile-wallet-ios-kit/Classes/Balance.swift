@@ -13,11 +13,12 @@ import ObjectMapper
 
 public struct Balance {
     
-    //private var balance:[UInt16:String] { return _balance }
-    
     public var available_assets:[UInt16] {
         return _balance.keys.compactMap{return $0}
     }
+    
+    public var address:String { return _address }
+    public var isNode:Bool { return _isNode }
     
     public func amount(_ asset_code:UInt16) -> Float? {
         if let idx = _balance.index(where: { (k,v) -> Bool in
@@ -28,8 +29,10 @@ public struct Balance {
         return nil
     }
     
-    public init(balance:[UInt16:String]){
+    public init(balance:[UInt16:String], address:String = "", isNode:Bool = false){
         self._balance = balance
+        self._address = address
+        self._isNode = isNode
     }
     
     public static func update(wallet: Wallet, error: @escaping ((_ error: Error?)-> Void),  
@@ -57,15 +60,23 @@ public struct Balance {
             case .success(let response):
                                 
                 guard let bal = response["balance"] as? NSArray as? Array<AnyObject?> else {
-                    //error(NSError(domain: "global.mile.wallet",
-                    //              code: 0,
-                    //              userInfo: [NSLocalizedDescriptionKey:
-                    //                NSLocalizedString("Balance getting error. Check network connection", comment: "")]))
                     complete(Balance(balance: [:]))
                     return
                 }
             
                 var balance:[UInt16:String] = [:]
+                var address = ""
+                var isNode = false
+                
+                if let _a =  response["address"] {
+                    address = "\(_a)"
+                }
+                
+                if let _n = response["tags"] as? [String] {
+                    if _n.firstIndex(of: "Node") != nil {
+                        isNode = true
+                    }
+                }
                 
                 for b in bal {
                     if let o = b as? NSDictionary, 
@@ -76,17 +87,17 @@ public struct Balance {
                     }
                 }
                 
-                complete(Balance(balance: balance))                     
+                complete(Balance(balance: balance, address: address, isNode: isNode))
                 
-            case .failure(let er):
-                
-                Swift.print("balance error: >>> \(error)")
+            case .failure(let er):                
                 error(er)
             }
         }     
     }    
     
-    fileprivate var _balance:[UInt16:String] = [:]    
+    fileprivate var _balance:[UInt16:String] = [:]
+    fileprivate var _address:String = ""
+    fileprivate var _isNode:Bool = false
 }
 
 extension Balance:Mappable {

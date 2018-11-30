@@ -27,7 +27,7 @@ public struct Rpc<Batch: JSONRPCKit.Batch>: APIKit.Request {
         return "/v1/api"
     }
     
-    public var parameters: Any? {
+    public var parameters: Any? {        
         return batch.requestObject
     }
     
